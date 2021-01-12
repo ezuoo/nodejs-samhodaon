@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const config = require("./config/key");
 
-
+// DB set
 const connect = mongoose
   .connect(config.mongoURI, {
     useNewUrlParser: true,
@@ -21,13 +21,15 @@ const connect = mongoose
 
 const port = process.env.PORT || 5000;
 
+// using
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-
+// route 
 app.use('/api/case', require('./routes/cases'));
+app.use('/api/class', require('./routes/classes'));
 
 
 app.listen(port, () => {

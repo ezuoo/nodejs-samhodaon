@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
-const CaseSchema = mongoose.Schema({
+
+/**
+const QnaSchema = mongoose.Schema({
   division: String,
   area: Number,
   color: Array,
@@ -14,8 +16,8 @@ const CaseSchema = mongoose.Schema({
   content: String
 });
 
+ */
 
+const Qna = mongoose.model('Qna', QnaSchema);
 
-const Case = mongoose.model('Case', CaseSchema);
-
-module.exports = { Case }
+module.exports = { Qna }
