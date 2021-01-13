@@ -21,28 +21,32 @@ router.post("", (req, res) => {
 router.get("", (req, res) => {
   Class.find((err, data) => {
     if (err) return res.json({ success: false, status: "GET", error: err });
-    if (data.length === 0) return res.json({ success: false, status: "GET", error: 'no query' });
-    
+    if (data.length === 0)
+      return res.json({ success: false, status: "GET", error: "no query" });
+
     return res.json({ success: true, status: "GET", data: data });
   });
 });
 
 /** DELETE value
  *  기존에 존재하던 값에서 빼야 함.
- */
+*/
 router.delete("", (req, res) => {
-    console.log(req.body)
-  Class.updateOne({ no: parseInt(1) }, { $pull: req.body },{multi: true}, (err, data) => {
-    if (err) return res.json({ success: false, status: "DELETE", error: err });
-    
-    return res.json({ success: true, status: "DELETE" });
-  });
+  for (let item in req.body) {
+    Class.updateOne(
+      { no: parseInt(1) },{ $pull: { [item]: { $in: req.body[item] } } }, (err, data) => {
+        if (err) return res.json({ success: false, status: "DELETE", error: err });
+      }
+    );
+  }
+  return res.json({ success: true, status: "DELETE" });
 });
 
 /** UPDATE value
  * 기존에 존재하던 값에서 더해야 함.
  */
 router.patch("", (req, res) => {
+  console.log(JSON.stringify(req.body));
   Class.updateOne({ no: parseInt(1) }, { $push: req.body }, (err, data) => {
     if (err) return res.json({ success: false, status: "UPDATE", error: err });
 
