@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Class } = require("../models/Class");
+const { Element } = require("../models/Element");
 
 /**
  * 1개의 row로 관리된다
@@ -11,7 +11,7 @@ const { Class } = require("../models/Class");
 
 /** INSERT row */
 router.post("", (req, res) => {
-  let row = new Class(req.body);
+  let row = new Element(req.body);
 
   row.save((err, userInfo) => {
     if (err) return res.json({ success: false, status: "POST", error: err });
@@ -21,7 +21,7 @@ router.post("", (req, res) => {
 
 /** SELECT and RETURN row  */
 router.get("", (req, res) => {
-  Class.find((err, data) => {
+  Element.find((err, data) => {
     if (err) return res.json({ success: false, status: "GET", error: err });
     if (data.length === 0)
       return res.json({ success: false, status: "GET", error: "no query" });
@@ -35,7 +35,7 @@ router.get("", (req, res) => {
  */
 router.delete("", (req, res) => {
   for (let item in req.body) {
-    Class.updateOne(
+    Element.updateOne(
       { no: parseInt(1) },
       { $pull: { [item]: { $in: req.body[item] } } },
       (err, data) => {
@@ -52,25 +52,42 @@ router.delete("", (req, res) => {
  */
 router.patch("", (req, res) => {
   const status = req.body.status;
-
+  const filter = { no: parseInt(1) };
   if (status === "push") {
-    Class.updateOne({ no: parseInt(1) }, { $push: req.body}, (err, data) => {
-
-      if (err) return res.json({ success: false, status: "UPDATE PUSH", error: err });
+    Element.updateOne({ no: parseInt(1) }, { $push: req.body }, (err, data) => {
+      if (err)
+        return res.json({ success: false, status: "UPDATE PUSH", error: err });
 
       return res.json({ success: true, status: "UPDATE PUSH" });
     });
   } else {
-    Class.findOne({ no: parseInt(1) }, (err, row) => {
-      if(err) return res.json({ success: false, status: "Not Found data", error: err });
 
-      row.editValue(req.body, (err, data) => {
-        if(err) return res.json({ success: false, status: "UPDATE EDIT", error: err });
+    Element.findOne(filter, (err, row) => {
+      if (err) return res.json({ success: false, status: "query error", error: err });
+      if (!row) return res.json({ success: false, status: "Not Found data", error: err});
 
-        return res.json({ success: true, status: "UPDATE EDIT"});
-      })
+      const field = req.body.field;
 
+      row[field][row[field].indexOf(req.body.old)] = req.body.new;
+      field === 'area' ? row[field].sort((a,b) => a-b) : console.log('# not area : ', field);
+      
+      row.save((err, data) => {
+        if (err) return res.json({ success: false, status: "UPDATE EDIT ERROR", error: err });
+        return res.json({ success: true, status: "UPDATE EDIT", data: data }); 
+      });
+
+       //console.log(update);
+       //let update = { [field]: row[field] };
+      
+      /* row.updateOne(filter, {}, (err, data) => {
+        if (err) return res.json({ success: false, status: "UPDATE EDIT ERROR", error: err });
+
+        console.log('matched : ', data.n);
+        console.log('modified : ', data.nModified);
+        return res.json({ success: true, status: "UPDATE EDIT" });
+      }); */
     });
+    
   }
 });
 
@@ -78,7 +95,7 @@ router.patch("", (req, res) => {
  * 테스트용
  */
 router.delete("/all", (req, res) => {
-  Class.deleteMany()
+  Element.deleteMany()
     .then(() => {
       console.log("deleted data");
       return res.json({ success: true, status: "DELETE" });
@@ -89,16 +106,12 @@ router.delete("/all", (req, res) => {
 });
 
 router.get("/test", (req, res) => {
-  const filter = { no: parseInt(1) };
-
-  const query = Class.findOne(filter);
-
-  query.exec().then((data) => {
-    console.log(query.getFilter());
-    return res.json({ success: true, data:data})
-  }).catch(error => console.log(error));
-
-  
+  const filter = { no: parseInt(3) };
+  const update = { division: "new new test"};
+  Element.testfunc((err, data) => {
+    if (err) return res.json({ success: false, msg: 'test function error'});
+    return res.json({ success: true, msg: 'test function success'});
+  });
 });
 
 module.exports = router;

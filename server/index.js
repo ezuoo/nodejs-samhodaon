@@ -29,7 +29,7 @@ app.use(cookieParser());
 
 // route 
 app.use('/api/case', require('./routes/cases'));
-app.use('/api/class', require('./routes/classes'));
+app.use('/api/element', require('./routes/elements'));
 
 
 app.listen(port, () => {
