@@ -16,38 +16,72 @@ const ElementSchema = mongoose.Schema({
   section: Array,
 });
 
-/* ClassSchema.methods.editValue = async function (parameter, cb) {
-  let classes = this;
+ElementSchema.statics.pushElement = function (parameter, cb) {
+  const filter = { no: 1};
+  const update = { $push : { [parameter.field] : parameter.value} };
+
+  Element.updateOne(filter, update, (err, data) => {
+    if (err) return cb(err, null);
+
+    return cb(null, data);
+  });
+};
+
+ElementSchema.statics.editElement = function (parameter, cb) {
   const field = parameter.field;
-  const query = { no : parseInt(1)};
+  const index = `${field}.$`;
+  const filter = { [field] : parameter.old };
+  const update =  { [index]: parameter.new };
   
-  
+  let query = Element.find({ no: 1 });
 
-  //const update = { $set: { field: classes[field] } };
-  const update = {no : parseInt(2)};
+  query.updateOne(filter, update);
 
-  classes.f
-  return cb(null, null);
-}; */
-ElementSchema.methods.edit = function(body , cb) {
-    let element = this;
-    element.
+  query.exec()
+    .then((data) => cb(null, data))
+    .catch((error) => cb(error, null));
+};
 
-    cb(null, body);
-}
+ElementSchema.statics.pullElement = function (parameter, cb) {
+  const field = parameter.field;
+  const filter = {[field] : parameter.value };
+  const update = { $pull: filter };
 
-ElementSchema.statics.testfunc =  function (cb) {
-  const query = Element.find();
-  query.updateOne({no:2}, {color: ["gray","red","black","white", "brown"]});
-  //query.replaceOne({no:2},{no: 2});
+  console.log('filter : ', filter);
+  console.log('update : ', update);
+
+  let query = Element.find({no:1});
+  query.updateOne(filter, update);
+
+  query.exec()
+    .then((data) => cb(null, data))
+    .catch((error) => cb(error, null));
+};
+
+
+
+
+ElementSchema.statics.testfunc = function (parameter, cb) {
+  const field = parameter.field;
+
+  /* field === 'area' ? row[field].sort((a,b) => a-b) : console.log('# not area : ', field); */
+  const query = Element.find({ no: 2 });
+  let test = `${field}.$`;
+
+  const update = {
+    [test]: parameter.new,
+  };
+
+  query.updateOne({ color: parameter.old }, update);
+  //query.replaceOne({no:2},{color : });
   //console.log(query.schema);
   query
     .exec()
     .then((data) => {
-     cb(null, data);
+      cb(null, data);
     })
     .catch((error) => cb(error, null));
-}
+};
 
 const Element = mongoose.model("Element", ElementSchema);
 

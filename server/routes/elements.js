@@ -9,109 +9,70 @@ const { Element } = require("../models/Element");
  * 추가 기능 : 특정 필드 전부 삭제, 값 수정
  */
 
-/** INSERT row */
+/** POST
+ *  insert data in database
+ */
 router.post("", (req, res) => {
   let row = new Element(req.body);
 
-  row.save((err, userInfo) => {
+  row.save((err, data) => {
     if (err) return res.json({ success: false, status: "POST", error: err });
-    return res.json({ success: true, status: "POST", data: row });
+    return res.json({ success: true, status: "POST", data: data });
   });
 });
 
-/** SELECT and RETURN row  */
+/** GET
+ *  fetch data from database
+ */
 router.get("", (req, res) => {
   Element.find((err, data) => {
     if (err) return res.json({ success: false, status: "GET", error: err });
-    if (data.length === 0)
-      return res.json({ success: false, status: "GET", error: "no query" });
+    if (data.length === 0) return res.json({ success: false, status: "GET", error: "no query" });
 
     return res.json({ success: true, status: "GET", data: data });
   });
 });
 
-/** DELETE value
- *  기존에 존재하던 값에서 빼야 함.
- */
-router.delete("", (req, res) => {
-  for (let item in req.body) {
-    Element.updateOne(
-      { no: parseInt(1) },
-      { $pull: { [item]: { $in: req.body[item] } } },
-      (err, data) => {
-        if (err)
-          return res.json({ success: false, status: "DELETE", error: err });
-      }
-    );
-  }
-  return res.json({ success: true, status: "DELETE" });
-});
-
-/** UPDATE value
- * 기존에 존재하던 값에서 더해야 함.
- */
+/** UPDATE 
+ * There are two cases.
+ * 1. push data 
+ * 2. edit existing data
+*/
 router.patch("", (req, res) => {
   const status = req.body.status;
-  const filter = { no: parseInt(1) };
-  if (status === "push") {
-    Element.updateOne({ no: parseInt(1) }, { $push: req.body }, (err, data) => {
-      if (err)
-        return res.json({ success: false, status: "UPDATE PUSH", error: err });
 
-      return res.json({ success: true, status: "UPDATE PUSH" });
+  if (status === "push") {
+    Element.pushElement(req.body, (err, data) => {
+      if (err) return res.json({ success: false, status: "PATCH (PUSH)", error: err });
+
+      return res.json({ success: true, status: "PATCH (PUSH)" });
     });
   } else {
-
-    Element.findOne(filter, (err, row) => {
-      if (err) return res.json({ success: false, status: "query error", error: err });
-      if (!row) return res.json({ success: false, status: "Not Found data", error: err});
-
-      const field = req.body.field;
-
-      row[field][row[field].indexOf(req.body.old)] = req.body.new;
-      field === 'area' ? row[field].sort((a,b) => a-b) : console.log('# not area : ', field);
-      
-      row.save((err, data) => {
-        if (err) return res.json({ success: false, status: "UPDATE EDIT ERROR", error: err });
-        return res.json({ success: true, status: "UPDATE EDIT", data: data }); 
-      });
-
-       //console.log(update);
-       //let update = { [field]: row[field] };
-      
-      /* row.updateOne(filter, {}, (err, data) => {
-        if (err) return res.json({ success: false, status: "UPDATE EDIT ERROR", error: err });
-
-        console.log('matched : ', data.n);
-        console.log('modified : ', data.nModified);
-        return res.json({ success: true, status: "UPDATE EDIT" });
-      }); */
+    Element.editElement(req.body, (err, data) => {
+      if (err) return res.json({ success: false, status: "PATCH (EDIT)", error: err });
+      return res.json({ success: true, status: "PATCH (EDIT)" });
     });
-    
   }
 });
 
-/** DELETE all row
- * 테스트용
+/** DELETE 
+ *  There are two cases.
+ *  1. delete item 
+ *  2. delete document
  */
-router.delete("/all", (req, res) => {
-  Element.deleteMany()
-    .then(() => {
-      console.log("deleted data");
-      return res.json({ success: true, status: "DELETE" });
-    })
-    .catch(function (error) {
-      return res.json({ success: false, status: "DELETE", error: error });
-    });
-});
+router.delete("", (req, res) => {
+  const status = req.body.status;
 
-router.get("/test", (req, res) => {
-  const filter = { no: parseInt(3) };
-  const update = { division: "new new test"};
-  Element.testfunc((err, data) => {
-    if (err) return res.json({ success: false, msg: 'test function error'});
-    return res.json({ success: true, msg: 'test function success'});
-  });
+  if(status === 'item') {
+    Element.pullElement(req.body, (err, data) => {
+      if(err) return res.json({ success: false, status: "DELETE (ITEM)", error: err});
+      return res.json({ success: true, status: "DELETE (ITEM)"});
+    });
+  } else { // status === document
+    Element.deleteOne()
+      .then((data) => res.json({ success: true, status: "DELETE (DOCUMENT)" }))
+      .catch((err) => res.json({ success: false, status: "DELETE (DOCUMENT)", error: err }));
+  }
 });
 
 module.exports = router;
