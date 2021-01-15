@@ -1,0 +1,130 @@
+{
+  "success": true,
+  "status": "GET ALL",
+  "data": [
+    {
+      "color": [
+        "color1",
+        "color2"
+      ],
+      "style": [
+        "style1",
+        "style10"
+      ],
+      "section": [
+        "section1",
+        "section2"
+      ],
+      "_id": "6001dc748625d61600b9cfa7",
+      "division": "공간1",
+      "area": 10,
+      "office": "daon",
+      "best": true,
+      "title": "This is test",
+      "info": "This is info",
+      "content": "This is content",
+      "date": "2021-01-16 03:18",
+      "__v": 0
+    },
+    {
+      "color": [
+        "color4",
+        "color2"
+      ],
+      "style": [
+        "style1",
+        "style2"
+      ],
+      "section": [
+        "section2",
+        "section4",
+        "section5"
+      ],
+      "_id": "6001dc888625d61600b9cfa8",
+      "division": "공간2",
+      "area": 20,
+      "office": "daon",
+      "best": false,
+      "title": "This is test",
+      "info": "This is info",
+      "content": "This is content",
+      "date": "2021-01-16 03:18",
+      "__v": 0
+    },
+    {
+      "color": [
+        "color1",
+        "color7"
+      ],
+      "style": [
+        "style5",
+        "style3"
+      ],
+      "section": [
+        "section1",
+        "section4",
+        "section3"
+      ],
+      "_id": "6001dc988625d61600b9cfa9",
+      "division": "공간3",
+      "area": 20,
+      "office": "daon",
+      "best": false,
+      "title": "This is test",
+      "info": "This is info",
+      "content": "This is content",
+      "date": "2021-01-16 03:19",
+      "__v": 0
+    },
+    {
+      "color": [
+        "color3"
+      ],
+      "style": [
+        "style4",
+        "style5"
+      ],
+      "section": [
+        "section3",
+        "section2",
+        "section6"
+      ],
+      "_id": "6001dc9d8625d61600b9cfaa",
+      "division": "공간2",
+      "area": 30,
+      "office": "daon",
+      "best": false,
+      "title": "This is test",
+      "info": "This is info",
+      "content": "This is content",
+      "date": "2021-01-16 03:19",
+      "__v": 0
+    },
+    {
+      "color": [
+        "color5",
+        "color3"
+      ],
+      "style": [
+        "style3",
+        "style4"
+      ],
+      "section": [
+        "section3",
+        "section6",
+        "section1"
+      ],
+      "_id": "6001dca08625d61600b9cfab",
+      "division": "공간3",
+      "area": 20,
+      "office": "daon",
+      "best": true,
+      "title": "This is test",
+      "info": "This is info",
+      "content": "This is content",
+      "date": "2021-01-16 03:19",
+      "__v": 0
+    }
+  ],
+  "length": 5
+}

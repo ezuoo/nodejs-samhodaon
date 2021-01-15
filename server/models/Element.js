@@ -47,9 +47,6 @@ ElementSchema.statics.pullElement = function (parameter, cb) {
   const filter = {[field] : parameter.value };
   const update = { $pull: filter };
 
-  console.log('filter : ', filter);
-  console.log('update : ', update);
-
   let query = Element.find({no:1});
   query.updateOne(filter, update);
 
