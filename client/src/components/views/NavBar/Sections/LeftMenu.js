@@ -9,11 +9,12 @@ function LeftMenu(props) {
   return (
     <Menu mode={props.mode}>
     <Menu.Item key="home">
-      <a href="/">Home</a>
+      <a href="/">메인</a>
     </Menu.Item>
-    <Menu.Item key="case">
-      <a href="/">시공사례</a>
+    <Menu.Item key="cases">
+      <a href="/cases">시공사례</a>
     </Menu.Item>
+    {/* 
     <Menu.Item key="qna">
       <a href="/">견적문의</a>
     </Menu.Item>
@@ -28,6 +29,7 @@ function LeftMenu(props) {
         <Menu.Item key="setting:4">Option 4</Menu.Item>
       </MenuItemGroup>
     </SubMenu>
+     */}
   </Menu>
   )
 }
