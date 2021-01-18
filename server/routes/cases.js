@@ -30,7 +30,7 @@ router.get("", (req, res) => {
             if(typeof req.body[key] === 'object') req.body[key].forEach(value => where.push({[key]:value}));
             else where.push({[key]:req.body[key]});
         } 
-        
+
         const filter = { $and: where };
         
         Case.find(filter, (err, data) => {
