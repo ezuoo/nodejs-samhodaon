@@ -20,6 +20,35 @@ const moment = require("moment");
  * 방안 수립 필요
  */
 router.get("", (req, res) => {
+    if(Object.keys(req.query).length === 0) {
+        Case.find((err, data) => {
+            if (err) return res.json({ success: false, status: "GET ALL", error: err });
+            if (data.length === 0) return res.json({ success: false, status: "GET ALL", error: 'no document'});
+    
+            return res.json({ success: true, status: "GET ALL", data: data, length: data.length });
+        });
+    } else {
+         let where = [];
+        for(let [key,value] of Object.entries(req.query)) value.toString().split(",").map( x => where.push( { [key] : x } ));
+        const filter = { $or: where };
+      
+        Case.find(filter, (err, data) => {
+            if (err) return res.json({ success: false, status: "GET FILTER", error: err });
+            if (data.length === 0) return res.json({ success: false, status: "GET FILTER", error: 'no document'});
+    
+            return res.json({ success: true, status: "GET FILTER", data: data, length: data.length });
+        });
+    }
+    
+})
+
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
+   
+    
+    res.send(id);
+});/* 
+router.get("", (req, res) => {
     const menu = req.headers.menu;
   
     if(menu === 'all') {
@@ -48,7 +77,7 @@ router.get("", (req, res) => {
         });
     }
     
-});
+}); */
 
 
 /** POST 

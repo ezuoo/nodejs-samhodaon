@@ -9,36 +9,19 @@ const { auth } = require("../middleware/auth");
 //=================================
 
 router.get("/auth", auth, (req, res) => {
-    res.status(200).json({
-        _id: req.user._id,
-        isAdmin: req.user.role === 0 ? false : true,
+    res.status(200).json({ 
         isAuth: true,
-        email: req.user.email,
-        name: req.user.name,
-        lastname: req.user.lastname,
-        role: req.user.role,
-        image: req.user.image,
+        adminId: req.user.adminId
     });
 });
 
-router.post("/register", (req, res) => {
-
-    const user = new User(req.body);
-
-    user.save((err, doc) => {
-        if (err) return res.json({ success: false, err });
-        return res.status(200).json({
-            success: true
-        });
-    });
-});
 
 router.post("/login", (req, res) => {
-    User.findOne({ email: req.body.email }, (err, user) => {
+    User.findOne({ adminId: req.body.adminId }, (err, user) => {
         if (!user)
             return res.json({
                 loginSuccess: false,
-                message: "Auth failed, email not found"
+                message: "Auth failed, id not found"
             });
 
         user.comparePassword(req.body.password, (err, isMatch) => {

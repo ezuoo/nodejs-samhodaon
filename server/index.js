@@ -28,8 +28,9 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // route 
-app.use('/api/case', require('./routes/cases'));
-app.use('/api/element', require('./routes/elements'));
+app.use('/api/cases', require('./routes/cases'));
+app.use('/api/elements', require('./routes/elements'));
+app.use('/api/users', require('./routes/users'));
 
 
 app.listen(port, () => {

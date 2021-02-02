@@ -47,10 +47,15 @@ router.patch("", (req, res) => {
 
       return res.json({ success: true, status: "PATCH (PUSH)" });
     });
-  } else {
+  } else if (status === "edit") {
     Element.editElement(req.body, (err, data) => {
       if (err) return res.json({ success: false, status: "PATCH (EDIT)", error: err });
       return res.json({ success: true, status: "PATCH (EDIT)" });
+    });
+  } else {
+    Element.saveElement(req.body, (err, data) => {
+      if (err) return res.json({ success: false, status: "PATCH (SAVE)", error: err });
+      return res.json({ success: true, status: "PATCH (SAVE)" });
     });
   }
 });
@@ -61,18 +66,10 @@ router.patch("", (req, res) => {
  *  2. delete document
  */
 router.delete("", (req, res) => {
-  const status = req.body.status;
-
-  if(status === 'item') {
-    Element.pullElement(req.body, (err, data) => {
-      if(err) return res.json({ success: false, status: "DELETE (ITEM)", error: err});
-      return res.json({ success: true, status: "DELETE (ITEM)"});
+    Element.pullElement(req.query, (err, data) => {
+      if(err) return res.json({ success: false, status: "DELETE", error: err});
+      return res.json({ success: true, status: "DELETE"});
     });
-  } else { // status === document
-    Element.deleteOne()
-      .then((data) => res.json({ success: true, status: "DELETE (DOCUMENT)" }))
-      .catch((err) => res.json({ success: false, status: "DELETE (DOCUMENT)", error: err }));
-  }
-});
+})
 
 module.exports = router;

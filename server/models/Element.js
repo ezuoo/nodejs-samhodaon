@@ -42,11 +42,23 @@ ElementSchema.statics.editElement = function (parameter, cb) {
     .catch((error) => cb(error, null));
 };
 
-ElementSchema.statics.pullElement = function (parameter, cb) {
-  const field = parameter.field;
-  const filter = {[field] : parameter.value };
-  const update = { $pull: filter };
+ElementSchema.statics.saveElement = function (parameter, cb) {
+  const filter = { no: 1};
+  const update = { [parameter.field] : parameter.value };
 
+  Element.updateOne(filter, update, (err, data) => {
+    if (err) return cb(err, null);
+
+    return cb(null, data);
+  });
+};
+
+ElementSchema.statics.pullElement = function (parameter, cb) {
+  const field = Object.keys(parameter)[0];
+  const value = Object.values(parameter)[0];
+  const filter = {[field] : value };
+  const update = { $pull: filter };
+ 
   let query = Element.find({no:1});
   query.updateOne(filter, update);
 
