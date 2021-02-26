@@ -17,6 +17,9 @@ function LeftMenu(props) {
       <Menu.Item key="notice">
         <Link to="/notice">공지사항</Link>
       </Menu.Item>
+      <Menu.Item key="order">
+        <Link to="/order">견적문의</Link>
+      </Menu.Item>
     </Menu>
   );
 }

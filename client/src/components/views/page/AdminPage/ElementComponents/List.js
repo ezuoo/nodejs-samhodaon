@@ -1,11 +1,14 @@
 import React from 'react';
+import axios from 'axios';
 import { Table, Button, Tooltip, Form, Popconfirm, Input, Space } from 'antd';
 import {PlusOutlined} from '@ant-design/icons'
-import './style.css';
 
-import axios from 'axios';
+import Notifications from '../../../commons/Notifications'
+import '../css/Admin.css';
 
-function AdminTable(props) {
+
+
+function List(props) {
     const [form] = Form.useForm();
     const [count, setCount] = React.useState(props.data.length + 1);
     const [editingKey, setEditingKey] = React.useState('');
@@ -17,13 +20,15 @@ function AdminTable(props) {
     const query = (data) => {
       switch (data.status) {
         case 'save':
-          // to do error handling
-          axios.patch('/api/elements', data);
+          axios.patch('/api/elements', data)
+                .then(response => Notifications(response.data));
           break;
-        case 'del':
-          axios.delete(`/api/elements?${data.field}=${data.value}`);
+        case 'delete':
+          axios.delete(`/api/elements?${data.field}=${data.value}`)
+                .then(response => Notifications(response.data));
           break;
         default:
+            Notifications(null);
           break;
       }
     }
@@ -35,7 +40,7 @@ function AdminTable(props) {
             data : v
           })
       )
-      setDataSource(newData)
+      setDataSource(newData);
     },[props.name])
 
     React.useLayoutEffect(() =>{
@@ -111,7 +116,7 @@ function AdminTable(props) {
     const handleDelete = (record) => {
         const data = [...dataSource];
         setDataSource(data.filter((item) => item.key !== record.key));
-        query({status: 'del', field: props.field, value : record.data });
+        query({status: 'delete', field: props.field, value : record.data });
     }
     
     const handleCancel = () => {
@@ -153,7 +158,7 @@ function AdminTable(props) {
                     (
                         <Space size="middle">
                             <Button onClick={()=>handleEdit(record)}> 수정</Button>
-                            <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record)}>
+                            <Popconfirm title="삭제할까요?" onConfirm={() => handleDelete(record)}>
                                  <Button>삭제</Button>
                             </Popconfirm>
                         </Space>
@@ -185,22 +190,17 @@ function AdminTable(props) {
 
     return (
         <div>
-            <div style={{ /* display: 'flex', justifyContent:'flex-end', */marginBottom: '1rem'}}>
+            <Table bordered columns={mergedColumns} components={components} dataSource={dataSource}
+                pagination={false} rowClassName={() => 'editable-row'} 
+            />
+             <div id="admin-element-tab-add">
                 <Tooltip title="새 데이터 추가">
                     <Button onClick={handelAdd} shape="circle" icon={<PlusOutlined />} />
                 </Tooltip>
             </div>
-            <Table 
-                bordered 
-                columns={mergedColumns} 
-                components={components} 
-                dataSource={dataSource}
-                pagination={false} 
-                rowClassName={() => 'editable-row'} 
-            />
         </div>
      
     )
 }
 
-export default React.memo(AdminTable)
+export default React.memo(List)

@@ -3,12 +3,27 @@ import axios from 'axios'
 import { Menu,Tag, Typography } from 'antd';
 
 
-const { Text } = Typography;
-const { CheckableTag } = Tag;
-const { SubMenu } = Menu;
-
 const menuData = ['area', 'color', 'division', 'section', 'style'];
-const styles = { backgroundColor: 'white' };
+
+const toKR = (name) => {
+    switch (name) {
+        case 'division':
+            return '공간'
+        case 'color':
+            return '색상'
+        case 'area':
+            return '평수'
+        case 'style':
+            return '스타일'
+        case 'section':
+            return '영역'
+        default:
+            break;
+    }
+}
+
+const styles = { backgroundColor: 'white', overflow: 'auto' };
+
 let arr = [];
 
 function SideBar(props) {
@@ -16,9 +31,6 @@ function SideBar(props) {
     const [selectedTags, setSelectedTags] = React.useState([]);
     const [param, setParam] = React.useState([]);
 
-    /**
-     * Function
-     */
     const fetchElements = React.useCallback(async () => {
         const ret = await axios.get('/api/elements');
         setElements(ret.data.data[0]);
@@ -60,33 +72,29 @@ function SideBar(props) {
         fetchElements();
     }, [fetchElements]);
     
-    /**
-     * Rendering
-     */
     return (
-            <Menu mode="inline"  /* onOpenChange={onOpenChange}  */
-            style={{ width: 250, height: '100%' }} inlineIndent={10}>
+            <Menu mode="inline" className='user-cases-row-left' inlineIndent={1}>
                {elements && 
                     menuData.map( (menu, index) => {
                         let key = `sub${index+1}`;
                          return (
-                            <SubMenu key={key} title={menu}>
+                            <Menu.SubMenu key={key} title={toKR(menu)} style={{borderBottom: '0.1rem solid #cccccc'}}>
                                 <Menu.Item key={index+1} style={styles}>
                                 {elements[menu].map(element => {
                                         return (
-                                            <CheckableTag 
+                                            <Tag.CheckableTag 
                                                     key={element} 
                                                     checked={selectedTags.indexOf(element) > -1}
                                                     onChange={checked => onTagChange(menu, element, checked)}
-                                                    style={{/* border: "1px solid #00a6d1", */ marginLeft: '0.5rem'}}>
+                                                    style={{ marginLeft: '0.5rem'}}>
                                                 
-                                                <Text style={{fontSize: '14px'}}>{element}</Text>
-                                            </CheckableTag> 
+                                                <Typography.Text style={{fontSize: '14px'}}>{element}</Typography.Text>
+                                            </Tag.CheckableTag> 
                                         )
                                     }) 
                                 }
                                 </Menu.Item>
-                            </SubMenu>  
+                            </Menu.SubMenu>  
                         )  
                     })
                 } 

@@ -1,13 +1,33 @@
 import React from "react";
+import axios from 'axios';
+import {Carousel} from 'antd'
 
-function BodyTop(props) {
+import '../../css/user.css';
+
+function BodyTop() {
+  const [dataSource, setDataSource] = React.useState(null);
+
+  const fetchData = async () => {
+    const response = await (await axios.get('/api/slides')).data;
+    
+    setDataSource(response.data[0].image);
+  }
+
+  React.useState(() => {
+    fetchData();
+  },[]);
+   
   return (
     <div>
-      <div
-        style={{width: "100%", margin: "0", height: "300px", display: "flex",
-            alignItems: "center", justifyContent: "center", backgroundColor: "gray"}}>
-        <h1>{props.title}</h1>
-      </div>
+      {dataSource !== null && (
+        <Carousel dots={false} autoplay style={{width: "100%",height: "350px"}}>
+        {dataSource.map((v,i) => {
+            return (<div key={i}>
+              <img src={v} alt={i} style={{width: '100%', height: '350px'}}/>
+            </div>);
+        })}
+        </Carousel>
+      )}
     </div>
   );
 }

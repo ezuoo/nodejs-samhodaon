@@ -1,16 +1,13 @@
 import React from 'react'
 import axios from 'axios'
-import {Typography, Row, Tabs} from 'antd'
+import {Typography, Tabs} from 'antd'
+import {SlidersOutlined} from '@ant-design/icons'
 
-import ElementTable from '../AdminPage/Section/AdminTable';
+import Load from './ElementComponents/Load'
+import List from './ElementComponents/List';
 
+import './css/Admin.css'
 
-const { Title } = Typography;
-const { TabPane } = Tabs;
-
-const callback = (key) => {
-    console.log(key);
-  }
 const toKR = (name) => {
     switch (name) {
         case 'division':
@@ -29,39 +26,51 @@ const toKR = (name) => {
 }
 
 function AdminElementPage() {
-    const [elements, setElements] = React.useState();
+    const [dataSource, setDataSource] = React.useState(null);
+    const [view, setView] = React.useState('load');
 
-    const fetchElements = React.useCallback(async () => {
-        const response = await axios.get('/api/elements');
-        const result = response.data.data[0];
-        const filteredData = Object.entries(result).filter((value)=> typeof value[1] === 'object')
-        setElements(filteredData)
-    },[])
-
-    
+    const fetchElements = async () => {
+        const response = await (await axios.get('/api/elements')).data.data[0];
+        const filteredData = Object.entries(response).filter((value)=> typeof value[1] === 'object')
+        
+        setDataSource(filteredData)
+    }
     
     React.useEffect(() => {
-        fetchElements();
-    },[fetchElements]);
+        setTimeout(() => {
+            fetchElements();
+            setView('list');
+        },300);
+        
+    },[]);
 
-    /* console.log('elements : ', elements) */
-    return (
-        <React.Fragment>
-            <Title level={2}>필터 관리</Title>
-            <Row style={{/* border: '1px solid black', */ backgroundColor: 'white', marginTop: '3rem', minHeight: '70vh'}}>
-                <Tabs onChange={callback} type="card" style={{width: '100%'}}>
-                    {elements && elements.map( (v,index)=> {
-                             const tabName = toKR(v[0]);
-                            return (<TabPane tab={tabName} key={index+1} style={{width: '90%',marginLeft:'3rem'}}>
-                                            <ElementTable name={tabName} field={v[0]} data={v[1]} />
-                                    </TabPane>)
-                        })
-                    }
-                </Tabs>
-                
-            </Row>
-        </React.Fragment>
-    )
+    switch (view) {
+        case 'load':
+            return <Load />
+        case 'list':
+            return (
+                <>
+                    <Typography.Title level={2}><SlidersOutlined /> 필터 관리</Typography.Title>
+                    <div id="admin-element-container">
+                        <Tabs id="admin-element-tab-container" type="card" size="large">
+                            {dataSource && dataSource.map( (v,index)=> {
+                                    const tabName = toKR(v[0]);
+                                    return (<Tabs.TabPane tab={tabName} key={index+1}>
+                                                    <List name={tabName} field={v[0]} data={v[1]} />
+                                            </Tabs.TabPane>)
+                                })
+                            }
+                        </Tabs>
+                    </div>
+                    
+                </>
+            ) 
+        default:
+            // TODO: Mapping to error page
+            break;
+    }
+
+   /*  */
 }
 
 export default React.memo(AdminElementPage);

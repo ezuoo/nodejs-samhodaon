@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React from 'react'
 import axios from 'axios';
-import {Row, Col, Button, Typography, Layout } from 'antd';
+import {Row, Col, Layout } from 'antd';
 
 
 import GridCard from '../../commons/GridCard';
@@ -8,11 +8,8 @@ import BodyTop from '../../commons/BodyTop';
 import Filter from './Section/SideBar';
 
 
-const { Title } = Typography;
-const { Footer, Content } = Layout;
-
 function CaseManyPage() {
-    const [CaseData, setCaseData] = useState([]);
+    const [CaseData, setCaseData] = React.useState([]);
    
     const fetchData = React.useCallback(async () => {
       const ret = await axios.get('/api/cases');
@@ -20,9 +17,6 @@ function CaseManyPage() {
       setCaseData(res.data);
     }, []);
 
-    const onClickHandler = () => {
-       alert('load more');
-   };    
 
     React.useEffect(() => {
       fetchData();
@@ -30,45 +24,32 @@ function CaseManyPage() {
 
     return (
       <>
-      <div style={{ paddingTop: "69px", minHeight: "calc(100vh - 80px)" }}>
-      <Layout style={{ backgroundColor: "white" }}>
-          <BodyTop title="CaseManyPage" />
-          <Content>
-            <Row gutter={[8, 8]} style={{ /* border: "1px solid black", */ marginTop: "1.5rem" }}>
-              
-              {/* SIDER BAR */}
-              <Col span={4}>
-                <Filter setCaseData={setCaseData} />
-              </Col>
+        <BodyTop/>
 
-              {/* BODY CONTENT SECTION */}
-              <Col span={17} style={{ border: "1px solid black" }}>
-                <Title level={3}>시공사례</Title>
+        <Layout className='user-cases-container'>
+            
+            <Layout.Content>
+              <Row className='user-cases-content-row'>
+                
+                <Col span={5}>
+                  <Filter setCaseData={setCaseData} />
+                </Col>
 
-                <hr />
-                <br />
+                <Col span={19} className='user-cases-row-right'>
+                  <h2>시공사례</h2><hr /><br />
 
-                <Row gutter={[16, 16]}>
-                  {CaseData &&
-                    CaseData.map((cases, index) => (
-                      <React.Fragment key={index}>
-                        <GridCard casedata={cases} />
-                      </React.Fragment>
-                    ))}
-                </Row>
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  <Button onClick={onClickHandler}>Load More</Button>
-                </div>
-              </Col>
-              {/* <Col span={3} style={{border: '1px solid black'}}> col-6</Col> */}
-            </Row>
-          </Content>
-
-          <Footer>
-
-          </Footer>
-        </Layout>
-      </div>
+                  <Row gutter={[16, 16]}>
+                    {CaseData &&
+                      CaseData.map((cases, index) => (
+                        <React.Fragment key={index}>
+                          <GridCard casedata={cases} />
+                        </React.Fragment>
+                      ))}
+                  </Row>
+                </Col>
+              </Row>
+            </Layout.Content>
+          </Layout>
       </>
     );
 }

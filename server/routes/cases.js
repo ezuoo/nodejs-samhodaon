@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require('mongoose');
 const { Case } = require("../models/Case");
 const moment = require("moment");
 
@@ -11,13 +12,6 @@ const moment = require("moment");
  *  2. best data 
  *  3. certain data
  *  status value : all / filter
- */
-/** get 메서드는 클라이언트에서 데이터 전송이 안된다.
- * 따라서 get 메서드는 수정이 필요하다
- * 자료 하나를 찾을 때 querystring으로 id를 받고
- * 필터링은 대책을 세워야함.
- * 헤더로 모든 데이터를 넘길수있나?
- * 방안 수립 필요
  */
 router.get("", (req, res) => {
     if(Object.keys(req.query).length === 0) {
@@ -44,9 +38,13 @@ router.get("", (req, res) => {
 
 router.get('/:id', (req, res) => {
     const id = req.params.id;
-   
+    Case.findById(id, (err, data) => {
+        if (err) return res.json({ success: false, msg: "데이터 불러오기 실패", error: err });
+        if (data.length === 0) return res.json({ success: false, msg: "데이터가 없습니다"});
     
-    res.send(id);
+        return res.json({ success: true, msg: "데이터 불러오기 성공", data: data});
+    })
+    
 });/* 
 router.get("", (req, res) => {
     const menu = req.headers.menu;
@@ -84,13 +82,12 @@ router.get("", (req, res) => {
  * insert data into database.
  */
 router.post("", (req, res) => {
-        let row = new Case(req.body);
-        row.date = moment().format("YYYY-MM-DD HH:mm");
-
-        row.save((err, userInfo) => {
-            if (err) return res.json({ success: false, status: "POST", error: err });
-            return res.json({ success: true, status: "POST", data: userInfo });
-        });
+    Case.saveCase(req.body, (data) => {
+        data.save((err, row) => {
+            if (err) return res.json({ success: false, msg: "데이터 입력 실패", error: err });
+            return res.json({ success: true, msg: "데이터 입력 완료", row: row });
+        })
+    });
 });
 
 
@@ -100,11 +97,10 @@ router.post("", (req, res) => {
 router.patch("/:id", (req, res) => {
     const id = req.params.id;
     const querystring = req.body;
-
+   
     Case.findByIdAndUpdate(id, querystring, (err, query) => {
-
-        if (err) return res.json({ success: false, status: "PATCH", error: err });
-        return res.json({ success: true, status: "PATCH", data: query });
+        if (err)  return res.json({ success: false, msg: "데이터 수정 실패", error: err });
+        return res.json({ success: true, msg: "데이터 수정 완료" });
 
     }); 
 });
@@ -117,9 +113,9 @@ router.delete("/:id", (req, res) => {
     const id = req.params.id;
 
     Case.findByIdAndDelete(id, (err, data) => {
-        if(err) { return res.json({ success: false, status: "DELETE ID", error: err }); }
+        if(err) { return res.json({ success: false, msg: "데이터 삭제 실패", error: err }); }
         
-        return res.json({ success: true, status: "DELETE ID" });
+        return res.json({ success: true, msg: "데이터 삭제 완료" });
 
     })
 });
@@ -127,10 +123,10 @@ router.delete("/:id", (req, res) => {
 /** DELETE 
  * delete all data
  */ 
-router.delete("", (req, res) => {
+/* router.delete("", (req, res) => {
         Case.deleteMany()
           .then((data) => res.json({ success: true, status: "DELETE ALL" }))
           .catch((err) => res.json({ success: false, status: "DELETE ALL", error: err }));
-});
+}); */
 
 module.exports = router;

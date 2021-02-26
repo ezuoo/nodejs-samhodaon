@@ -31,7 +31,10 @@ app.use(cookieParser());
 app.use('/api/cases', require('./routes/cases'));
 app.use('/api/elements', require('./routes/elements'));
 app.use('/api/users', require('./routes/users'));
-
+app.use('/api/images', require('./routes/images'))
+app.use('/api/slides', require('./routes/slides'))
+app.use('/api/notices', require('./routes/notices'))
+app.use('/api/orders', require('./routes/orders'))
 
 app.listen(port, () => {
   console.log(`Server Listening on ${port}`);
