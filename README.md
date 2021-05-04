@@ -23,20 +23,28 @@
 ## 📇 메인페이지
 ![samhodaon](https://user-images.githubusercontent.com/61848895/116965181-28183f80-ace8-11eb-8214-de100ae53ef1.png)
 <br />
+<h5 align="center"> 메인 슬라이뷰와 베스트 시공사례가 보여지도록 구현하였습니다 </h5>
+<br />
 
 ## 🎥 회사 소개
 ![intro](https://user-images.githubusercontent.com/61848895/116965197-2fd7e400-ace8-11eb-8e33-7cc589c38b8d.png)
 
+<br />
+<h5 align="center"> 회사소개와 회사 위치를 카카오 맵 API로 구현하였습니다 </h5>
 <br />
 
 ## 🎥 시공 사례
 ![case](https://user-images.githubusercontent.com/61848895/116965210-336b6b00-ace8-11eb-9648-c881c07add55.png)
 
 <br />
+<h5 align="center"> 시공 사례 리스트를 카드형식으로 보여지게 하고, 필터 기능을 구현하였습니다. </h5>
+<br />
 
 ## 🎥 공지사항
 ![notice](https://user-images.githubusercontent.com/61848895/116965219-37978880-ace8-11eb-8d3e-8e5da9cd8cbe.png)
 
+<br />
+<h5 align="center"> 특정 공지사항을 누르면 상세내용이 나오도록 구현하였습니다 </h5>
 <br />
 
 ## 🎥 견적문의
@@ -44,12 +52,15 @@
 ![qna_address](https://user-images.githubusercontent.com/61848895/116965234-3d8d6980-ace8-11eb-9f0e-c50b340b193f.png)
 
 <br />
+ <h5 align="center"> 주소 검색을 다음 우편번호 API를 사용하여 구현하였습니다 </h5>
+<br />
 
 ## 🎥 관리자 페이지
 ![admin](https://user-images.githubusercontent.com/61848895/116965240-42eab400-ace8-11eb-93bc-d846abedee1f.png)
 
 <br />
-
+<h5 align="center"> 웹 애플리케이션의 내용에 접근할 수 있도록 기능 구현을 하였습니다. </h5>
+<br />
 
 ## 🗺️ 참고
 - [**React Hooks API**](https://ko.reactjs.org/docs/hooks-reference.html)
