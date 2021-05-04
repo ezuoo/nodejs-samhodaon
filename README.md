@@ -65,6 +65,7 @@
 ## 🗺️ 참고
 - [**React Hooks API**](https://ko.reactjs.org/docs/hooks-reference.html)
 - [**Kakao open API**](https://developers.kakao.com/)
+- [**다음 우편주소 API**](https://postcode.map.daum.net/guide)
 <br />
 
 ## 🌿 후기
