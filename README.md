@@ -20,7 +20,7 @@
  
 <br />
 
-## 🎥 메인페이지
+## 📇 메인페이지
 ![samhodaon](https://user-images.githubusercontent.com/61848895/116965181-28183f80-ace8-11eb-8214-de100ae53ef1.png)
 <br />
 
