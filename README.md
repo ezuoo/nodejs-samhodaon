@@ -20,19 +20,37 @@
  
 <br />
 
-## 🎥 랜딩페이지
-![main](https://user-images.githubusercontent.com/61848895/116954225-5424c800-acca-11eb-8d51-4c70286698ff.png)
-
-<br/>
- <h4 align="center"> 더보기 버튼을 누르면 영화 리스트를 이어서 보여지도록 구현했습니다.</h4>
+## 🎥 메인페이지
+![samhodaon](https://user-images.githubusercontent.com/61848895/116965181-28183f80-ace8-11eb-8214-de100ae53ef1.png)
 <br />
 
-## 🎥 영화 정보
-![detail](https://user-images.githubusercontent.com/61848895/116954191-3ce5da80-acca-11eb-9306-19e2dc4e79f0.png)
+## 🎥 회사 소개
+![intro](https://user-images.githubusercontent.com/61848895/116965197-2fd7e400-ace8-11eb-8e33-7cc589c38b8d.png)
+
 <br />
+## 🎥 시공 사례
+![case](https://user-images.githubusercontent.com/61848895/116965210-336b6b00-ace8-11eb-9648-c881c07add55.png)
+
+<br />
+## 🎥 공지사항
+![notice](https://user-images.githubusercontent.com/61848895/116965219-37978880-ace8-11eb-8d3e-8e5da9cd8cbe.png)
+
+<br />
+## 🎥 견적문의
+![qns (2)](https://user-images.githubusercontent.com/61848895/116965225-3b2b0f80-ace8-11eb-92c7-f74f61b338af.png)
+![qna_address](https://user-images.githubusercontent.com/61848895/116965234-3d8d6980-ace8-11eb-9f0e-c50b340b193f.png)
+
+<br />
+
+## 🎥 관리자 페이지
+![admin](https://user-images.githubusercontent.com/61848895/116965240-42eab400-ace8-11eb-93bc-d846abedee1f.png)
+
+<br />
+
 
 ## 🗺️ 참고
 - [**React Hooks API**](https://ko.reactjs.org/docs/hooks-reference.html)
+- [**Kakao open API**](https://developers.kakao.com/)
 <br />
 
 ## 🌿 후기
